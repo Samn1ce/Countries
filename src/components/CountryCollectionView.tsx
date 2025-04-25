@@ -8,7 +8,7 @@ export default function CountryCollectionView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { selectedtCountry, setSelectedCountry } = useContext(
+  const { selectedCountry, setSelectedCountry } = useContext(
     SelectedCountryContext
   );
   const { setStep } = useContext(StepContext);
@@ -18,8 +18,8 @@ export default function CountryCollectionView() {
       try {
         const data = await fetchAllCountries();
         setCountries(data);
-      } catch (err) {
-        setError("Failed to load countries. " + err);
+      } catch (error) {
+        setError("Failed to load countries. " + error);
       } finally {
         setLoading(false);
       }
@@ -39,7 +39,7 @@ export default function CountryCollectionView() {
           onClick={() => {
             setSelectedCountry(country);
             setStep(2); // move to detail step
-            console.log(SelectedCountry);
+            console.log(selectedCountry);
           }}
           className="bg-[rgb(43,55,67)] rounded-lg overflow-hidden shadow-md"
         >
