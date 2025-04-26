@@ -5,4 +5,7 @@ type StepContextType = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const StepContext = createContext<StepContextType | null>(null);
+export const StepContext = createContext<StepContextType>({
+  step: 1,
+  setStep: () => {},
+});

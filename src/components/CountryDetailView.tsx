@@ -1,91 +1,79 @@
-import { useState, useEffect, useContext } from "react";
-import { fetchAllCountries } from "../api/restcountries";
+import { useContext } from "react";
 import { SelectedCountryContext } from "../context/SelectedCountry";
 
 export default function CountryDetailView() {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { selectedCountry, setSelectedCountry } = useContext(
-    SelectedCountryContext
-  );
+  const { selectedCountry } = useContext(SelectedCountryContext);
 
-  useEffect(() => {
-    const getCountry = async () => {
-      try {
-        const data = await fetchAllCountries();
-        return setSelectedCountry(data);
-      } catch (error) {
-        setError("Failed to load countries" + error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Extract the values safely with optional chaining
+  const name = selectedCountry.name?.common || "Unknown";
+  const population = selectedCountry.population?.toLocaleString() || "Unknown";
+  const region = selectedCountry.region || "Unknown";
+  const subregion = selectedCountry.subregion || "Unknown";
+  const capital = selectedCountry.capital?.[0] || "Unknown";
+  const tld = selectedCountry.tld?.[0] || "Unknown";
 
-    getCountry();
-  }, []);
+  // Handle potentially nested or complex properties
+  const currencies = selectedCountry.currencies
+    ? Object.values(selectedCountry.currencies)
+        .map((currency: any) => currency.name)
+        .join(", ")
+    : "Unknown";
 
-  if (loading) return <p>Loading countries...</p>;
-  if (error) return <p>{error}</p>;
+  const languages = selectedCountry.languages
+    ? Object.values(selectedCountry.languages).join(", ")
+    : "Unknown";
 
-  const {
-    name,
-    population,
-    region,
-    subregion,
-    capital,
-    tld,
-    currencies,
-    languages,
-    flags,
-    borders,
-  } = selectedCountry;
+  const nativeName = selectedCountry.name?.nativeName
+    ? Object.values(selectedCountry.name.nativeName)[0]?.common || name
+    : name;
+
+  const borderCountries = selectedCountry.borders || [];
 
   return (
     <div className="grid md:grid-cols-2 gap-12 items-center">
       {/* Flag Section */}
       <div className="w-full aspect-video">
         <img
-          src={flags.png}
-          alt={flags.alt}
+          src={selectedCountry.flags?.png}
+          alt={selectedCountry.flags?.alt || `Flag of ${name}`}
           className="w-full h-full object-cover shadow-lg"
         />
       </div>
 
       {/* Country Information */}
       <div>
-        <h2 className="text-3xl font-bold mb-6">Belgium</h2>
+        <h2 className="text-3xl font-bold mb-6">{name}</h2>
 
         <div className="grid md:grid-cols-2 gap-4">
           {/* Left Column */}
           <div>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Native Name:</span> België
+              <span className="font-semibold">Native Name:</span> {nativeName}
             </p>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Population:</span> 11,319,511
+              <span className="font-semibold">Population:</span> {population}
             </p>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Region:</span> Europe
+              <span className="font-semibold">Region:</span> {region}
             </p>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Sub Region:</span> Western Europe
+              <span className="font-semibold">Sub Region:</span> {subregion}
             </p>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Capital:</span> Brussels
+              <span className="font-semibold">Capital:</span> {capital}
             </p>
           </div>
 
           {/* Right Column */}
           <div>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Top Level Domain:</span> .be
+              <span className="font-semibold">Top Level Domain:</span> {tld}
             </p>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Currencies:</span> Euro
+              <span className="font-semibold">Currencies:</span> {currencies}
             </p>
             <p className="text-sm mb-2">
-              <span className="font-semibold">Languages:</span> Dutch, French,
-              German
+              <span className="font-semibold">Languages:</span> {languages}
             </p>
           </div>
         </div>
@@ -94,14 +82,18 @@ export default function CountryDetailView() {
         <div className="mt-8">
           <p className="text-sm font-semibold mb-4">Border Countries:</p>
           <div className="flex flex-wrap gap-2">
-            {["France", "Germany", "Netherlands"].map((country) => (
-              <button
-                key={country}
-                className="bg-[#2b3743] px-4 py-1 rounded-md text-sm shadow-md"
-              >
-                {country}
-              </button>
-            ))}
+            {borderCountries.length > 0 ? (
+              borderCountries.map((border) => (
+                <button
+                  key={border}
+                  className="bg-[#2b3743] px-4 py-1 rounded-md text-sm shadow-md"
+                >
+                  {border}
+                </button>
+              ))
+            ) : (
+              <p className="text-sm">No bordering countries</p>
+            )}
           </div>
         </div>
       </div>

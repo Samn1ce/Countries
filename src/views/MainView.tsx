@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { StepContext } from "../context/StepContext";
 import IconBack from "../components/icons/IconBack";
 import CountryCollectionView from "../components/CountryCollectionView";
 import CountryDetailView from "../components/CountryDetailView";
 
 export default function MainView() {
-  const [step, setStep] = useState(1);
+  const { step, setStep } = useContext(StepContext);
 
   const handleBack = () => {
     if (step > 1) {

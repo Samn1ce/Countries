@@ -28,6 +28,12 @@ export default function CountryCollectionView() {
     getCountries();
   }, []);
 
+  useEffect(() => {
+    if (selectedCountry) {
+      console.log("Selected country updated:", selectedCountry);
+    }
+  }, [selectedCountry]);
+
   if (loading) return <p>Loading countries...</p>;
   if (error) return <p>{error}</p>;
   return (
@@ -39,7 +45,6 @@ export default function CountryCollectionView() {
           onClick={() => {
             setSelectedCountry(country);
             setStep(2); // move to detail step
-            console.log(selectedCountry);
           }}
           className="bg-[rgb(43,55,67)] rounded-lg overflow-hidden shadow-md"
         >
@@ -54,7 +59,7 @@ export default function CountryCollectionView() {
             <h2 className="text-lg font-bold mb-4">{country.name.common}</h2>
             <p className="text-sm mb-1">
               <span className="font-semibold">Population:</span>{" "}
-              {country.population}
+              {country.population.toLocaleString()}
             </p>
             <p className="text-sm mb-1">
               <span className="font-semibold">Region:</span> {country.region}
