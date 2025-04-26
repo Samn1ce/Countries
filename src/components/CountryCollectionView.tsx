@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { SelectedCountryContext } from "../context/SelectedCountry";
 import { StepContext } from "../context/StepContext";
 import { fetchAllCountries } from "../api/restcountries"; // adjust path if needed
+import Spinner from "./Spinner";
 
 export default function CountryCollectionView() {
   const [countries, setCountries] = useState([]);
@@ -28,13 +29,7 @@ export default function CountryCollectionView() {
     getCountries();
   }, []);
 
-  useEffect(() => {
-    if (selectedCountry) {
-      console.log("Selected country updated:", selectedCountry);
-    }
-  }, [selectedCountry]);
-
-  if (loading) return <p>Loading countries...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>{error}</p>;
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
