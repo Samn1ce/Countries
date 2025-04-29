@@ -1,34 +1,15 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { Country, SelectedCountryContext } from "../context/SelectedCountry";
 import { StepContext } from "../context/StepContext";
-import { fetchAllCountries } from "../api/restcountries"; // adjust path if needed
-import Spinner from "./Spinner";
 
-export default function CountryCollectionView() {
-  const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+export default function CountryCollectionView({
+  countries,
+}: {
+  countries: Country[];
+}) {
   const { setSelectedCountry } = useContext(SelectedCountryContext);
   const { setStep } = useContext(StepContext);
 
-  useEffect(() => {
-    const getCountries = async () => {
-      try {
-        const data = await fetchAllCountries();
-        setCountries(data);
-      } catch (error) {
-        setError("Failed to load countries. " + error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getCountries();
-  }, []);
-
-  if (loading) return <Spinner />;
-  if (error) return <p>{error}</p>;
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 pt-12">
       {/* Country Card Template */}
