@@ -30,7 +30,7 @@ export default function CountryDetailView() {
   const borderCountries = selectedCountry.borders || [];
 
   return (
-    <div className="grid md:grid-cols-2 gap-12 items-center">
+    <div className="grid md:grid-cols-2 gap-12 pb-5 items-center">
       {/* Flag Section */}
       <div className="w-full aspect-video">
         <img
