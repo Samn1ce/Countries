@@ -21,6 +21,7 @@ export default function MainView() {
     const getCountries = async () => {
       try {
         const data = await fetchAllCountries();
+        console.log("Fetched countries:", data);
         setCountries(data);
       } catch (error) {
         setError("Failed to load countries. " + error);
@@ -29,11 +30,14 @@ export default function MainView() {
       }
     };
     getCountries();
-  }, [setCountries]);
+  }, []);
 
   const filteredCountries = countries.filter((country) =>
-    filter ? country.region.toLowerCase() === filter.toLowerCase() : true
+    filter ? country.region.toLowerCase() === filter.toLowerCase() : countries
   );
+
+  console.log("Filtered countries:", filteredCountries);
+  console.log("Current filter:", filter);
 
   const handleBack = () => {
     if (step > 1) {
@@ -54,7 +58,7 @@ export default function MainView() {
           <div className="container mx-auto px-4 pt-12">
             {/* Back Button */}
             {step === 1 ? (
-              <div className="w-full flex flex-col md:flex-row justify-between">
+              <div className="w-full flex flex-col gap-4 md:gap-0 md:flex-row justify-between">
                 <div className="relative w-full md:w-96">
                   {/* <Search /> */}
                   <input
@@ -66,14 +70,14 @@ export default function MainView() {
                 <div className="relative">
                   <div
                     onClick={() => setDropdownRegion(!dropdownRegion)}
-                    className="mb-1 h-12 text-xs bg-[#2b3743] rounded-md flex gap-8 justify-between items-center px-5 cursor-pointer"
+                    className="mb-1 h-12 w-44 md:w-auto text-xs bg-[#2b3743] rounded-md flex gap-8 justify-between items-center px-5 cursor-pointer"
                   >
                     <p>Filter by Region</p>
                     <IconDown />
                   </div>
                   <div
                     onClick={() => setDropdownRegion(false)}
-                    className={`absolute w-full bg-[#2b3743] rounded-md text-xs  flex flex-col gap-2 py-3 ${
+                    className={`absolute w-44 md:w-full bg-[#2b3743] rounded-md text-xs  flex flex-col gap-2 py-3 ${
                       dropdownRegion ? "block" : "hidden"
                     }`}
                   >
