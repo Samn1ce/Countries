@@ -7,6 +7,7 @@ import IconDown from "../components/icons/IconDown";
 import { fetchAllCountries } from "../api/restcountries";
 import { CountriesContext } from "../context/Countries";
 import Spinner from "../components/Spinner";
+import Header from "../components/Header";
 
 export default function MainView() {
   const [dropdownRegion, setDropdownRegion] = useState(false);
@@ -28,10 +29,7 @@ export default function MainView() {
       }
     };
     getCountries();
-  }, []);
-
-  if (loading) return <Spinner />;
-  if (error) return <p>{error}</p>;
+  }, [setCountries]);
 
   const filteredCountries = countries.filter((country) =>
     filter ? country.region.toLowerCase() === filter.toLowerCase() : true
@@ -51,13 +49,7 @@ export default function MainView() {
         <p>{error}</p>
       ) : (
         <div className="min-h-screen bg-[#202D36] text-zinc-50">
-          {/* Header */}
-          <header className="w-full h-16 bg-[#2b3743] shadow-md">
-            <div className="container mx-auto px-4 h-full flex items-center">
-              <h1 className="text-xl font-bold">Where in the world?</h1>
-            </div>
-          </header>
-
+          <Header />
           {/* Main Content */}
           <div className="container mx-auto px-4 pt-12">
             {/* Back Button */}
