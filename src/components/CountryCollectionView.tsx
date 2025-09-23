@@ -10,7 +10,7 @@ export default function CountryCollectionView({
   const { setSelectedCountry } = useContext(SelectedCountryContext);
   const { setStep } = useContext(StepContext);
 
-  console.log("Countries in collection view:", countries);
+  // console.log("Countries in collection view:", countries);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 pt-12">

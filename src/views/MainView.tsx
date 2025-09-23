@@ -21,7 +21,6 @@ export default function MainView() {
     const getCountries = async () => {
       try {
         const data = await fetchAllCountries();
-        console.log("Fetched countries:", data);
         setCountries(data);
       } catch (error) {
         setError("Failed to load countries. " + error);
@@ -30,14 +29,15 @@ export default function MainView() {
       }
     };
     getCountries();
-  }, []);
+  }, [setCountries]);
 
-  const filteredCountries = countries.filter((country) =>
-    filter ? country.region.toLowerCase() === filter.toLowerCase() : countries
+  const filteredCountries = countries.filter(
+    (country: { region: string }) =>
+      !filter || country.region.toLowerCase() === filter.toLowerCase()
   );
 
-  console.log("Filtered countries:", filteredCountries);
-  console.log("Current filter:", filter);
+  // console.log("Filtered countries:", filteredCountries);
+  // console.log("Current filter:", filter);
 
   const handleBack = () => {
     if (step > 1) {
@@ -81,7 +81,7 @@ export default function MainView() {
                       dropdownRegion ? "block" : "hidden"
                     }`}
                   >
-                    {["Africa", "America", "Asia", "Europe", "Oceania"].map(
+                    {["Africa", "Americas", "Asia", "Europe", "Oceania"].map(
                       (region) => (
                         <div
                           key={region}
