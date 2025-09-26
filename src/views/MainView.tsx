@@ -16,6 +16,7 @@ export default function MainView() {
   const [error, setError] = useState<string | null>(null);
   const { step, setStep } = useContext(StepContext);
   const { countries, setCountries } = useContext(CountriesContext);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const getCountries = async () => {
@@ -31,9 +32,15 @@ export default function MainView() {
     getCountries();
   }, [setCountries]);
 
-  const filteredCountries = countries.filter(
+  const regionCountries = countries.filter(
     (country: { region: string }) =>
       !filter || country.region.toLowerCase() === filter.toLowerCase()
+  );
+
+  const filteredCountries = regionCountries.filter(
+    (country: { name: { common: string } }) =>
+      !searchQuery ||
+      country.name.common.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // console.log("Filtered countries:", filteredCountries);
@@ -63,6 +70,8 @@ export default function MainView() {
                   {/* <Search /> */}
                   <input
                     type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search for a country..."
                     className="w-full h-12 pl-10 pr-4 bg-[#2b3743] rounded-md text-white placeholder-gray-300 focus:outline-none"
                   />
@@ -85,7 +94,10 @@ export default function MainView() {
                       (region) => (
                         <div
                           key={region}
-                          onClick={() => setFilter(region)}
+                          onClick={() => {
+                            setFilter(region);
+                            setSearchQuery("");
+                          }}
                           className="hover:bg-blue-500 px-5 py-1 cursor-pointer capitalize"
                         >
                           {region}
@@ -114,7 +126,14 @@ export default function MainView() {
 
           <main className="container mx-auto px-4">
             {step === 1 ? (
-              <CountryCollectionView countries={filteredCountries} />
+              filteredCountries.length > 0 ? (
+                <CountryCollectionView countries={filteredCountries} />
+              ) : (
+                <p className="text-center mt-10 text-gray-300">
+                  No results found for "{searchQuery}" in {filter}. Check
+                  another region.
+                </p>
+              )
             ) : step === 2 ? (
               <CountryDetailView />
             ) : (
