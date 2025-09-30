@@ -6,8 +6,8 @@ import { StepContext } from "./context/StepContext";
 
 function App() {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [step, setStep] = useState<number>(2);
-  const [countries, setCountries] = useState<object[]>([]);
+  const [step, setStep] = useState<number>(1);
+  const [countries, setCountries] = useState<Country[]>([]);
 
   return (
     <CountriesContext.Provider value={{ countries, setCountries }}>

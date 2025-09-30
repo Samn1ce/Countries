@@ -1,11 +1,12 @@
 import { createContext } from "react";
+import { Country } from "./SelectedCountry";
 
 type CountriesContextType = {
-  countries: Array<object>;
-  setCountries: React.Dispatch<React.SetStateAction<object[]>>;
+  countries: Country[];
+  setCountries: React.Dispatch<React.SetStateAction<Country[]>>;
 };
 
-export const CountriesContext = createContext<CountriesContextType | null>({
+export const CountriesContext = createContext<CountriesContextType>({
   countries: [],
   setCountries: () => {},
 });
