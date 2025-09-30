@@ -4,6 +4,14 @@ import { SelectedCountryContext } from "../context/SelectedCountry";
 export default function CountryDetailView() {
   const { selectedCountry } = useContext(SelectedCountryContext);
 
+  if (!selectedCountry) {
+    return (
+      <div className="text-center py-12">
+        <p>No country selected</p>
+      </div>
+    );
+  }
+
   // Extract the values safely with optional chaining
   const name = selectedCountry.name?.common || "Unknown";
   const population = selectedCountry.population?.toLocaleString() || "Unknown";
