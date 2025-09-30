@@ -23,7 +23,7 @@ export default function CountryDetailView() {
   // Handle potentially nested or complex properties
   const currencies = selectedCountry.currencies
     ? Object.values(selectedCountry.currencies)
-        .map((currency: any) => currency.name)
+        .map((currency: { name: string; symbol: string }) => currency.name)
         .join(", ")
     : "Unknown";
 
